@@ -1,0 +1,91 @@
+00: blank
+01:
+02:
+03:
+04:
+05:
+06:
+07:
+08:
+09:
+10: water
+11: water (NW corner)
+12: water (NE corner)
+13: water (SW corner)
+14: water (SE corner)
+15:
+16: // river
+17: // river (NW corner)
+18: // river (NE corner)
+19: // river (SW corner)
+20: // river (SE corner)
+30:
+31: log bridge (W)
+32: log bridge (E)
+33:
+34: // ocean
+35:
+36:
+37: mountain
+38:
+39:
+40: tree
+41:
+42: dirt
+43:
+44: grass
+45:
+46:
+47:
+48:
+49:
+50: path
+51: road
+52:
+53:
+54:
+55: log wall
+56:
+57:
+58: dark boards
+59:
+60: door
+61:
+62:
+63:
+64:
+65:
+66:
+67:
+68:
+69:
+70:
+71:
+72:
+73:
+74:
+75:
+76:
+77:
+78:
+79:
+80:
+81:
+82:
+83:
+84:
+85:
+86:
+87:
+88:
+89:
+90: NPC (Oldman)
+91: NPC
+92: NPC
+93: NPC
+94: NPC
+95: NPC
+96: NPC
+97: NPC
+98: NPC
+99: NPC

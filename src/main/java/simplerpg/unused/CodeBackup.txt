@@ -1,0 +1,73 @@
+****************************************************************************************************
+**  Some old code removed before starting version control. I may need to look back on something.  **
+****************************************************************************************************
+
+///////////////////////////////////////////////////////////////
+
+public class KeyListener extends AbstractAction
+{
+
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        Logger.debug("KeyPressed: " + e.getActionCommand());
+        String direction;
+
+        switch (e.getActionCommand())
+        {
+            case "w":
+                direction = FormEvent.NORTH;
+                break;
+            case "LEFT":
+                direction = FormEvent.WEST;
+                break;
+            case "RIGHT":
+                direction = FormEvent.EAST;
+                break;
+            case "DOWN":
+                direction = FormEvent.SOUTH;
+                break;
+            default:
+                direction = "";
+        }
+
+        if (!direction.isEmpty())
+        {
+            listener.formActionPerformed(new FormEvent(this, direction));
+        }
+    }
+}
+
+///////////////////////////////////////////////////////////////
+
+try
+{
+    Scanner scan = new Scanner(new File("src/main.java.simpleRPG/model/Map.txt"));
+
+    while (scan.hasNextLine())
+    {
+        Scanner scan2 = new Scanner(scan.nextLine());
+
+        while (scan2.hasNext())
+        {
+            String str = scan2.next();
+
+            if (str.equals("\r"))
+            {
+                Logger.debug("scan.next = \\r");
+            }
+            else if (str.equals("\n"))
+            {
+                Logger.debug("scan.next = \\n");
+            }
+            else
+            {
+                gridX.add(new MapIcon(str));
+            }
+        }
+        gridY.add(gridX);
+        gridX = new ArrayList<>();
+    }
+}
+
+///////////////////////////////////////////////////////////////
