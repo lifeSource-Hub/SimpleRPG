@@ -46,7 +46,7 @@ public class MapPanel extends JPanel
             {
                 lblMap[i][j] = new JLabel();
                 add(lblMap[i][j]);
-                // For debugging - lblMap[i][j].setPreferredSize(new Dimension(20, 20));
+                // For testing - lblMap[i][j].setPreferredSize(new Dimension(20, 20));
             }
         }
 
