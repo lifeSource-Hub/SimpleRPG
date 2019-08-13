@@ -51,7 +51,7 @@ public class MapPanel extends JPanel
         }
 
         initializeGrid();
-        Logger.debug("MapPanel rows: " + lblRowCount + "  columns: " + lblColCount + "\n");
+        // Logger.debug("MapPanel rows: " + lblRowCount + "  columns: " + lblColCount + "\n");
     }
 
     private void initializeGrid()
@@ -69,15 +69,15 @@ public class MapPanel extends JPanel
         // Logger.debug("MapPanel initialized");
     }
 
-    void movePlayer(int rowMove, int colMove)
+    public void movePlayer(int rowMove, int colMove)
     {
         int newRowPos = plyrRowPos + rowMove;
         int newColPos = plyrColPos + colMove;
 
         if (mapGrid.isTraversable(newRowPos, newColPos))
         {
-            Logger.debug("Current row: " + plyrRowPos + " column: " + plyrColPos
-                    + " — New row: " + newRowPos + " column: " + newColPos);
+            Logger.debug("CURRENT: row " + plyrRowPos + ", column " + plyrColPos
+                    + " — NEW: row " + newRowPos + ", column " + newColPos);
 
             redisplayGrid(newRowPos, newColPos);
             plyrRowPos = newRowPos;

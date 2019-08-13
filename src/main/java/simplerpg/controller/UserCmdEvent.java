@@ -4,7 +4,6 @@ import java.util.EventObject;
 
 public class UserCmdEvent extends EventObject
 {
-    public static final String REST = "rest";
     private String payload;
     private int rowMovement;
     private int colMovement;

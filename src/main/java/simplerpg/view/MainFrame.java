@@ -1,8 +1,7 @@
 package simplerpg.view;
 
 import org.pmw.tinylog.Logger;
-import simplerpg.controller.Controllable;
-import simplerpg.controller.UserCmdEvent;
+import simplerpg.controller.PanelEventController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,19 +9,17 @@ import java.awt.*;
 public class MainFrame extends JFrame
 {
     private NewCharacterPanel newCharacterPnl;
-    private MapPanel gridPnl;
-    private InputPanel inputPnl;
-    private PlayerPanel infoPnl;
-    private TextPanel textPnl;
+    private MapPanel mapPnl;
+    private PlayerPanel playerInfoPnl;
 
     public MainFrame()
     {
-        this(375, 325);
+        createCharacter();
     }
 
-    public MainFrame(int width, int height)
+    private void createCharacter()
     {
-        createCharacter(width, height);
+        createCharacter(375, 325);
     }
 
     private void createCharacter(int width, int height)
@@ -38,16 +35,15 @@ public class MainFrame extends JFrame
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        //////////////
-        // Automatically submit default character
+        //region Automatically submit default character
+        //-----------------------------------------------------------------------------
         if (newCharacterPnl.setNewCharacterInfo())
         {
-            newCharacterPnl.printNewCharacterInfo();
-
             remove(newCharacterPnl);
             startGame();
         }
-        /////////////
+        //-----------------------------------------------------------------------------
+        //endregion
 
         newCharacterPnl.setListener(e ->
         {
@@ -74,56 +70,42 @@ public class MainFrame extends JFrame
 
     private void startGame()
     {
-        // Logger.debug("Game started");
-        gridPnl = new MapPanel();
-        inputPnl = new InputPanel();
-        infoPnl = new PlayerPanel(newCharacterPnl.getNewCharacterInfo());
-        textPnl = new TextPanel();
+        Logger.debug("Game started");
+        mapPnl = new MapPanel();
+        playerInfoPnl = new PlayerPanel(newCharacterPnl.getNewCharacterInfo());
+
+        // TODO consider changing the controller or the panels to fields
+        //  (is it more appropriate to pass panels to controller or to pass controller to panels?)
+        PanelEventController controller = new PanelEventController();
+        InputPanel inputPnl = new InputPanel();//controller);
+        TextPanel textPnl = new TextPanel();
+
+        controller.setMapPnl(mapPnl);
+        controller.setInputPnl(inputPnl);
+        controller.setNewCharacterPnl(newCharacterPnl);
+        inputPnl.setController(controller);
 
         JPanel outerContainer = new JPanel();
         outerContainer.setLayout(new BorderLayout());
         outerContainer.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         outerContainer.setPreferredSize(new Dimension(300, 710));
-        outerContainer.add(infoPnl, BorderLayout.NORTH);
+        outerContainer.add(playerInfoPnl, BorderLayout.NORTH);
         outerContainer.add(textPnl, BorderLayout.CENTER);
         outerContainer.add(inputPnl, BorderLayout.SOUTH);
 
-        add(gridPnl, BorderLayout.WEST);
+        add(mapPnl, BorderLayout.WEST);
         add(outerContainer, BorderLayout.CENTER);
-
-        inputPnl.setListener(new Controllable()
-        {
-            @Override
-            public void controlCmdEvent(UserCmdEvent e)
-            {
-                switch (e.getPayload())
-                {
-                    case "":
-                        Logger.debug("rowMovement: " + e.getRowMovement()
-                                + "  colMovement: " + e.getColMovement());
-                        gridPnl.movePlayer(e.getRowMovement(), e.getColMovement());
-                        break;
-                    case UserCmdEvent.REST:
-                        infoPnl.setHealth(10);
-                        break;
-                }
-            }
-        });
 
         revalidate();
         pack();
         repaint();
-        // setPreferredSize(new Dimension(1000, 1200));
-        // setSize(950, 800);
         setTitle("Game Application");
         setLocationRelativeTo(null);
-        // revalidate();
-        // repaint();
 
         Logger.debug("Frame Width: " + this.getWidth() + "  Height: " + this.getHeight());
-        Logger.debug("MapPanel Width: " + gridPnl.getWidth() + "  Height: " + gridPnl.getHeight());
+        Logger.debug("MapPanel Width: " + mapPnl.getWidth() + "  Height: " + mapPnl.getHeight());
         Logger.debug("outerContainer Width: " + outerContainer.getWidth() + "  Height: " + outerContainer.getHeight());
-        Logger.debug("PlayerPanel Width: " + infoPnl.getWidth() + "  Height: " + infoPnl.getHeight());
+        Logger.debug("PlayerPanel Width: " + playerInfoPnl.getWidth() + "  Height: " + playerInfoPnl.getHeight());
         Logger.debug("TextPanel Width: " + textPnl.getWidth() + "  Height: " + textPnl.getHeight());
         Logger.debug("InputPanel Width: " + inputPnl.getWidth() + "  Height: " + inputPnl.getHeight() + "\n");
     }

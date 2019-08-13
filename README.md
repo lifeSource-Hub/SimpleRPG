@@ -16,6 +16,10 @@ goal is to get a basic combat system working as soon as possible.
 * Items and Inventory
 * Dialog
 
+### Controls ###
+
+The arrow keys are bound to the movement buttons.
+
 <br />
 
 ![Screenshot of game](src/main/resources/gameScreenshot.png)

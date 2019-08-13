@@ -111,7 +111,7 @@ public class NewCharacterPanel extends JPanel
         add(txtFieldPnl, BorderLayout.CENTER);
         add(btnPanel, BorderLayout.SOUTH);
 
-        setPanelStyle(this);
+        setComponentsStyle(this);
 
         setDefaultValues();
     }
@@ -131,7 +131,7 @@ public class NewCharacterPanel extends JPanel
         this.errorMsg.setText(msg);
     }
 
-    private void setPanelStyle(Container container)
+    private void setComponentsStyle(Container container)
     {
         for (Component component : container.getComponents())
         {
@@ -149,13 +149,13 @@ public class NewCharacterPanel extends JPanel
             else if (component instanceof JPanel)
             {
                 ((JPanel) component).setBorder(BorderFactory.createEmptyBorder(10, 10, 2, 10));
-                setPanelStyle((Container) component);
+                setComponentsStyle((Container) component);
             }
         }
     }
 
     /**
-     * @return Return true if successful, false if there are empty fields.
+     * @return Return false if any submitted fields were left empty, otherwise return true.
      */
     boolean setNewCharacterInfo()
     {
@@ -229,7 +229,7 @@ public class NewCharacterPanel extends JPanel
     }
 
     /**
-     * Print new character to console. For debugging only.
+     * Print new character entry to console. For debugging only.
      */
     void printNewCharacterInfo()
     {
