@@ -74,8 +74,6 @@ public class MainFrame extends JFrame
         mapPnl = new MapPanel();
         playerInfoPnl = new PlayerPanel(newCharacterPnl.getNewCharacterInfo());
 
-        // TODO consider changing the controller or the panels to fields
-        //  (is it more appropriate to pass panels to controller or to pass controller to panels?)
         PanelEventController controller = new PanelEventController();
         InputPanel inputPnl = new InputPanel();//controller);
         TextPanel textPnl = new TextPanel();
