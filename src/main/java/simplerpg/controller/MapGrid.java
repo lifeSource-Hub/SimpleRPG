@@ -5,7 +5,7 @@
 package simplerpg.controller;
 
 import org.pmw.tinylog.Logger;
-import simplerpg.model.MapIcon;
+import simplerpg.model.MapPlot;
 import simplerpg.view.TextPanel;
 
 import javax.swing.*;
@@ -15,35 +15,36 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-// TODO replace hard-coded filename
 public class MapGrid
 {
-    private ArrayList<ArrayList<MapIcon>> gridY;
-    private ArrayList<MapIcon> gridX;
-    private int gridSizeY;
-    private int gridSizeX;
-
     private final String URL = "jdbc:sqlite::resource:simplerpg.db";
-    private final String TABLE = "mapicon";
+    private final String TABLE = "mapimagefile";
+
+    private final String SEED_FILENAME = "Map.txt";
+
+    private ArrayList<ArrayList<MapPlot>> gridRow;
+    private ArrayList<MapPlot> gridCol;
+    private int gridRowCount;
+    private int gridColCount;
 
     public MapGrid()
     {
-        gridY = new ArrayList<>();
-        gridX = new ArrayList<>();
+        gridRow = new ArrayList<>();
+        gridCol = new ArrayList<>();
 
-        initializeGrid();
+        scanGridSeedFile();
 
-        gridSizeY = gridY.size();
-        gridSizeX = gridY.get(0).size();
+        gridRowCount = gridRow.size();
+        gridColCount = gridRow.get(0).size();
     }
 
-    // Initialize ArrayLists with values scanned from map text file
-    private void initializeGrid()
+    // Initialize ArrayLists with values scanned from seed file
+    private void scanGridSeedFile()
     {
         try
         {
             Scanner scan;
-            InputStream stream = getClass().getClassLoader().getResourceAsStream("Map.txt");
+            InputStream stream = getClass().getClassLoader().getResourceAsStream(SEED_FILENAME);
 
             if (stream != null)
             {
@@ -62,25 +63,25 @@ public class MapGrid
                 {
                     int seed = scan2.nextInt();
 
-                    queryIcon(seed);
+                    initializeGrid(seed);
                 }
 
-                gridY.add(gridX);
-                gridX = new ArrayList<>();
+                gridRow.add(gridCol);
+                gridCol = new ArrayList<>();
             }
         }
         catch (IOException e)
         {
-            Logger.error("Error reading file "); // TODO add filename
+            Logger.error("Error reading file \"" + SEED_FILENAME + "\"");
             e.printStackTrace();
             System.exit(1);
         }
     }
 
-    private void queryIcon(int seed)
+    private void initializeGrid(int seed)
     {
         String query = "SELECT * FROM " + TABLE
-                + " WHERE mapIconID IN(" + seed + ");";
+                + " WHERE imageID IN(" + seed + ");";
 
         try (Connection conn = DriverManager.getConnection(URL))
         {
@@ -89,13 +90,14 @@ public class MapGrid
 
             while (resultSet.next())
             {
-                int id = resultSet.getInt("mapIconID");
+                int id = resultSet.getInt("imageID");
                 String name = resultSet.getString("name");
                 String filename = resultSet.getString("filename");
-                String category = resultSet.getString("category");
+                String category = resultSet.getString("terrainType");
                 boolean traversable = resultSet.getBoolean("traversable");
+                String traversalText = resultSet.getString("traversalText");
 
-                gridX.add(new MapIcon(id, name, filename, category, traversable));
+                gridCol.add(new MapPlot(id, name, filename, category, traversable, traversalText));
             }
         }
         catch (SQLException e)
@@ -105,61 +107,34 @@ public class MapGrid
     }
 
 
-    public ImageIcon getIcon(int y, int x)
+    public ImageIcon getMapPlotIcon(int row, int col)
     {
-        // return gridY.get(y).get(x);
-        return gridY.get(y).get(x).getICON();
+        // return gridRow.get(y).get(x);
+        return gridRow.get(row).get(col).getIcon();
     }
 
-    public int getGridSizeY()
+    public int getGridRowCount()
     {
-        return gridSizeY;
+        return gridRowCount;
     }
 
-    public int getGridSizeX()
+    public int getGridColCount()
     {
-        return gridSizeX;
+        return gridColCount;
     }
 
-    public boolean isTraversable(int y, int x)
+    public boolean isPlotWithinBounds(int row, int col)
     {
-        if (y >= 0 && y < gridSizeY && x >= 0 && x < gridSizeX)
-        {
-            if (gridY.get(y).get(x).isTRAVERSABLE())
-            {
-                TextPanel.setText("");
-                return true;
-            }
-            else
-            {
-                TextPanel.displayUntraversableMsg(gridY.get(y).get(x).getID());
-            }
-        }
-        else
-        {
-            TextPanel.setText("You can't leave the area until you've completed your mission.");
-        }
-
-        return false;
+        return (row >= 0) && (row < gridRowCount) && (col >= 0) && (col < gridColCount);
     }
 
-    /**
-     * Print ASCII representation of map to console. For debugging only.
-     */
-    public void printMapGrid()
+    public boolean isPlotTraversable(int row, int col)
     {
-        Logger.debug("\n");
+        return gridRow.get(row).get(col).isTraversable();
+    }
 
-        for (ArrayList<MapIcon> y : gridY)
-        {
-            for (MapIcon mapIcon : y)
-            {
-                Logger.debug(mapIcon.getID() + " ");
-            }
-
-            Logger.debug("\n");
-        }
-
-        Logger.debug("\n");
+    public String getPlotTraversalText(int row, int col)
+    {
+        return gridRow.get(row).get(col).getTraversalText();
     }
 }

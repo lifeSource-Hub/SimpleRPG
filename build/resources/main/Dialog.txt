@@ -1,0 +1,18 @@
+[Water]
+"The water here looks deep and you doubt you could reach the other side.";
+
+[Wall]
+"A wall stands before you. You'll have to find another way.";
+
+[Hut]
+Seeing the rickety door wide open, you step though into a small hut.
+It takes a few moments for your eyes to adjust, then you make out an old
+man sitting in the corner, mending what looks to be a fishing net. A
+variety of tools are scattered about and you notice the larder is
+well-stocked. Perhaps the man would be willing to trade.
+
+[OldMan]
+As you approach the man he looks up and smiles. "Interested in some trade?
+(1) Let's see what you have.
+(2) No, I'm busy looking for something.
+(3) What can you tell me about this area?

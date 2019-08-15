@@ -31,8 +31,8 @@ public class MapPanel extends JPanel
         plyrColPos = plyrStartCol;
 
         mapGrid = new MapGrid();
-        lblRowCount = mapGrid.getGridSizeY();
-        lblColCount = mapGrid.getGridSizeX();
+        lblRowCount = mapGrid.getGridRowCount();
+        lblColCount = mapGrid.getGridColCount();
         lblMap = new JLabel[lblRowCount][lblColCount];
 
         PLAYER_ICON = setPlyrIcon();
@@ -60,7 +60,7 @@ public class MapPanel extends JPanel
         {
             for (int j = 0; j < lblColCount; j++)
             {
-                lblMap[i][j].setIcon(mapGrid.getIcon(i, j));
+                lblMap[i][j].setIcon(mapGrid.getMapPlotIcon(i, j));
             }
         }
 
@@ -74,21 +74,30 @@ public class MapPanel extends JPanel
         int newRowPos = plyrRowPos + rowMove;
         int newColPos = plyrColPos + colMove;
 
-        if (mapGrid.isTraversable(newRowPos, newColPos))
+        if (!mapGrid.isPlotWithinBounds(newRowPos, newColPos))
         {
-            Logger.debug("CURRENT: row " + plyrRowPos + ", column " + plyrColPos
-                    + " — NEW: row " + newRowPos + ", column " + newColPos);
+            TextPanel.displayOutOfBounds();
+        }
+        else
+        {
+            if (mapGrid.isPlotTraversable(newRowPos, newColPos))
+            {
+                Logger.debug("CURRENT: row " + plyrRowPos + ", column " + plyrColPos
+                        + " — NEW: row " + newRowPos + ", column " + newColPos);
 
-            redisplayGrid(newRowPos, newColPos);
-            plyrRowPos = newRowPos;
-            plyrColPos = newColPos;
+                redisplayGrid(newRowPos, newColPos);
+                plyrRowPos = newRowPos;
+                plyrColPos = newColPos;
+            }
+
+            TextPanel.setText(mapGrid.getPlotTraversalText(newRowPos, newColPos));
         }
     }
 
     private void redisplayGrid(int newRow, int newCol)
     {
         lblMap[plyrRowPos][plyrColPos].removeAll();
-        lblMap[plyrRowPos][plyrColPos].setIcon(mapGrid.getIcon(plyrRowPos, plyrColPos));
+        lblMap[plyrRowPos][plyrColPos].setIcon(mapGrid.getMapPlotIcon(plyrRowPos, plyrColPos));
 
         lblMap[newRow][newCol].setLayout(new BorderLayout());
         lblMap[newRow][newCol].add(new JLabel(PLAYER_ICON));
@@ -126,7 +135,7 @@ public class MapPanel extends JPanel
         }
         catch (IOException e)
         {
-            Logger.error("Error reading " + PLAYER_ICON_PATH);
+            Logger.error("Error reading \"" + PLAYER_ICON_PATH + "\"");
             e.printStackTrace();
             System.exit(1);
         }

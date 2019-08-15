@@ -9,8 +9,6 @@ import java.awt.*;
 public class MainFrame extends JFrame
 {
     private NewCharacterPanel newCharacterPnl;
-    private MapPanel mapPnl;
-    private PlayerPanel playerInfoPnl;
 
     public MainFrame()
     {
@@ -37,11 +35,11 @@ public class MainFrame extends JFrame
 
         //region Automatically submit default character
         //-----------------------------------------------------------------------------
-        if (newCharacterPnl.setNewCharacterInfo())
-        {
-            remove(newCharacterPnl);
-            startGame();
-        }
+        // if (newCharacterPnl.setNewCharacterInfo())
+        // {
+        //     remove(newCharacterPnl);
+        //     startGame();
+        // }
         //-----------------------------------------------------------------------------
         //endregion
 
@@ -71,16 +69,15 @@ public class MainFrame extends JFrame
     private void startGame()
     {
         Logger.debug("Game started");
-        mapPnl = new MapPanel();
-        playerInfoPnl = new PlayerPanel(newCharacterPnl.getNewCharacterInfo());
 
+        MapPanel mapPnl = new MapPanel();
+        PlayerPanel playerInfoPnl = new PlayerPanel(newCharacterPnl.getNewCharacterInfo());
         PanelEventController controller = new PanelEventController();
-        InputPanel inputPnl = new InputPanel();//controller);
+        InputPanel inputPnl = new InputPanel();
         TextPanel textPnl = new TextPanel();
 
         controller.setMapPnl(mapPnl);
-        controller.setInputPnl(inputPnl);
-        controller.setNewCharacterPnl(newCharacterPnl);
+        controller.setTextPnl(textPnl);
         inputPnl.setController(controller);
 
         JPanel outerContainer = new JPanel();
@@ -97,7 +94,7 @@ public class MainFrame extends JFrame
         revalidate();
         pack();
         repaint();
-        setTitle("Game Application");
+        setTitle("Simple RPG");
         setLocationRelativeTo(null);
 
         Logger.debug("Frame Width: " + this.getWidth() + "  Height: " + this.getHeight());

@@ -159,7 +159,8 @@ public class InputPanel extends JPanel
         public void actionPerformed(ActionEvent e)
         {
             Logger.debug(command);
-            // CONTROLLER.move();
+            // handle button
+            CONTROLLER.handleRestCommand();
         }
     }
 
@@ -173,7 +174,6 @@ public class InputPanel extends JPanel
         private final String label;
         private final int rowMovement;
         private final int colMovement;
-        private static final Map<String, MovementCommand> COMMAND_MAP;
 
         MovementCommand(String label, int rowMovement, int colMovement)
         {
@@ -195,27 +195,6 @@ public class InputPanel extends JPanel
         public int getColMovement()
         {
             return colMovement;
-        }
-
-        static
-        {
-            Map<String, MovementCommand> map = new HashMap<>();
-
-            for (MovementCommand instance : MovementCommand.values())
-            {
-                map.put(instance.name(), instance);
-            }
-
-            COMMAND_MAP = Collections.unmodifiableMap(map);
-        }
-
-        /**
-         * @param key String representation of enum name
-         * @return enum MovementCommand
-         */
-        public static MovementCommand getCommand(String key)
-        {
-            return COMMAND_MAP.get(key);
         }
     }
 

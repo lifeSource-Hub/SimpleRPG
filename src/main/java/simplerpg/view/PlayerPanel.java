@@ -29,7 +29,7 @@ public class PlayerPanel extends JPanel
     private JLabel plyrClass;
     private JLabel plyrGender;
 
-    public PlayerPanel(Map<String, String> playerInfo)
+    PlayerPanel(Map<String, String> playerInfo)
     {
         pc = new PlayerCharacter(playerInfo);
         
@@ -54,7 +54,7 @@ public class PlayerPanel extends JPanel
         weaponLbl = new JLabel("Weapon:");
         plyrWeapon = new JLabel("none");
 
-        // TODO hard-coded map names == bad, use final from NewCharacterPanel
+        // TODO replace strings with final from NewCharacterPanel
         //  or create new object (class) for setting and accessing
         raceLbl = new JLabel("Race:");
         plyrRace = new JLabel(playerInfo.get("race"));

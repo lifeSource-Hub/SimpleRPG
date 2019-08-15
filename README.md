@@ -6,9 +6,8 @@ experience and for my own enjoyment.
 ### Project Status ###
 
 There is very little that a user can actually do at this point, other 
-than move around. Much of my time (perhaps too much) has been spent 
-designed and refactoring, rather than adding new content. My current 
-goal is to get a basic combat system working as soon as possible.
+than move around. My current goal is to get a basic combat system 
+working as soon as possible.
 
 ### Upcoming Features ###
 
